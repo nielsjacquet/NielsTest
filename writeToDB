@@ -1,0 +1,116 @@
+#!/usr/bin/env bash
+
+##cosmetic functions and Variables
+##Colors
+RED='\033[0;31m'
+YELLOW='\033[0;33m'
+GREEN='\033[0;32m'
+NC='\033[0m'
+BLUE='\033[0;34m'
+
+##Break function for readabillity
+BR()
+{
+  echo "  "
+}
+
+##DoubleBreak function for readabillity
+DBR()
+{
+  echo " "
+  echo " "
+}
+
+##Paths
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null && pwd )"  ##Homedir
+IFS=";"
+csvlist="$DIR/csv.csv"
+payloadApp="/Users/UCB/Documents/UCB/Scriptz/ExplodeIpa/com.ucb.apps.myucb4me.dev_1.3.0_19108.1.ipa/Payload/myUCB4me.app"
+infoPlist="/Users/UCB/Documents/UCB/Scriptz/ExplodeIpa/com.ucb.apps.myucb4me.dev_1.3.0_19108.1.ipa/Info.plist"
+embeddedProfile="/Users/UCB/Documents/UCB/Scriptz/ExplodeIpa/com.ucb.apps.myucb4me.dev_1.3.0_19108.1.ipa/Payload/myUCB4me.app/embedded.mobileprovision"
+
+repo="/Volumes/Macintosh HD-1/Users/Shared/myUCB4me_AppRepo"
+TEMP="/Volumes/Macintosh HD-1/Users/Shared/myUCB4me_AppRepo/_TEMP"
+
+  echo ipaArrayLength $ipaArrayLength
+
+##unzip ipa to temp folder
+
+##get the proper app folder
+
+##get all the stuff done :-)
+ 
+getCertificateDate()
+{
+  printf "${GREEN}Getting the certificate dates${NC}\n"
+  codesign -d --extract-certificates "$payloadApp"
+  certs=$(openssl x509 -inform DER -in codesign0 -noout -nameopt -oneline -dates)
+  printf "${YELLOW}$certs ${NC}\n"
+  echo $certs > $DIR/$ogIpa/SigningCertificate.txt
+  notBefore=$(cat "$DIR/$ogIpa/SigningCertificate.txt" | grep "notBefore")
+  notAfter=$(cat "$DIR/$ogIpa/SigningCertificate.txt" | grep "notAfter")
+}
+
+extractVersionFuntion()
+{
+  plutil -convert xml1 $infoPlist
+  printf "${GREEN}Extracting the app version${NC}\n"
+  buildVersionRude=$(cat $infoPlist | grep -A1 "CFBundleVersion")
+  printf "${BLUE}buildVersionRude $buildVersionRude\n"
+  buildVersionMinEnd=$(echo ${buildVersionRude%?????????})
+  printf "${BLUE}buildIDMinEnd: $buildVersionMinEnd\n"
+  buildVersionMinFront=$(echo ${buildVersionMinEnd:37})
+  buildVersion=$buildVersionMinFront
+  printf "${BLUE}buildVersion: $buildVersion${NC}\n"
+}
+
+extractBundleIDFunction()
+{
+  printf "${GREEN}Extracting the bundle id${NC}\n"
+  bundleIDRude=$(cat $infoPlist | grep -A1 "CFBundleIdentifier")
+  printf "${BLUE}bundleIDRude: $bundleIDRude\n"
+  bundleIDMinEnd=$(echo ${bundleIDRude%?????????})
+  printf "${BLUE}bundleIDMinEnd: $bundleIDMinEnd\n"
+  bundleIDMinFront=$(echo ${bundleIDMinEnd:40})
+  bundleID=$bundleIDMinFront
+  printf "${BLUE}bundleID: $bundleID${NC}\n"
+}
+
+extractProvProfEndDate()
+{
+  printf "${GREEN}Extracting the end date of the provisioning profile${NC}\n"
+  ProvProfDRude=$(cat $embeddedProfile | grep -a -A1 --text "ExpirationDate")
+  printf "${BLUE}ProvProfRude: $ProvProfDRude\n"
+  ProvProfMinEnd=$(echo ${ProvProfDRude%????????})
+  printf "${BLUE}ProvProfMinEnd: $ProvProfMinEnd\n"
+  ProvProfMinFront=$(echo ${ProvProfMinEnd:34})
+  ProvProf=$ProvProfMinFront
+  printf "${BLUE}ProvProf: $ProvProf${NC}\n"
+}
+
+writeToCSV()
+{
+  echo "$Apps;$bundleID;$buildVersion;$notBefore;$notAfter;$ProvProf" >> $csvlist
+}
+
+removeTEMP()
+{
+  ##Remove the temp tempFolder
+}
+
+
+for Apps in "$repo"/*
+  do
+    ipaFileExtentions="${Apps##*.}"                             ##extract just the FileExtention without the dot
+    echo File: $Apps
+    echo FileExtention: $ipaFileExtentions
+    if [ $ipaFileExtentions == "ipa" ]                          ##if the FileExtention equals ipa
+      then
+        amountOfIpas+=("$toBeExploded")                         ##put the file in an array
+        ipaArrayLength=${#amountOfIpas[@]}                      ##Get the array length for the next statement
+        ogIpaWithExtention="${Apps##*/}"
+        echo ogIpaWithExtention: $ogIpaWithExtention
+        ogIpaNoExtention=$(echo ${ogIpaWithExtention%.ipa})
+        echo ogIpaNoExtention: $ogIpaNoExtention
+      fi
+  done
