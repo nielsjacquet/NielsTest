@@ -31,31 +31,42 @@ embeddedProfile="/Users/UCB/Documents/UCB/Scriptz/ExplodeIpa/com.ucb.apps.myucb4
 
 repo="/Volumes/Macintosh HD-1/Users/Shared/myUCB4me_AppRepo"
 TEMP="/Volumes/Macintosh HD-1/Users/Shared/myUCB4me_AppRepo/_TEMP"
+payloadFolder="/Volumes/Macintosh HD-1/Users/Shared/myUCB4me_AppRepo/_TEMP/Payload"
 
-  echo ipaArrayLength $ipaArrayLength
-
+if [[ -d "$repo" ]]
+  then
+    printf "${GREEN}Repo folder is available${NC}\n"
+    BR
+  else
+    printf "${RED}Repo folder is not available${NC}\n"
+    exit 113
+fi
 ##unzip ipa to temp folder
+unZip()
+{
+  printf "${GREEN}Unzipping the ipa${NC}\n"
+  unzip "$Apps" -d $TEMP
+  cd $payloadFolder
+  payloadApp=$(ls | grep '.app')
+  printf "${BLUE}payloadApp: $payloadApp${NC}\n"
+}
 
-##get the proper app folder
-
-##get all the stuff done :-)
- 
 getCertificateDate()
 {
   printf "${GREEN}Getting the certificate dates${NC}\n"
-  codesign -d --extract-certificates "$payloadApp"
+  codesign -d --extract-certificates "$payloadFolder/$payloadApp"
   certs=$(openssl x509 -inform DER -in codesign0 -noout -nameopt -oneline -dates)
   printf "${YELLOW}$certs ${NC}\n"
-  echo $certs > $DIR/$ogIpa/SigningCertificate.txt
-  notBefore=$(cat "$DIR/$ogIpa/SigningCertificate.txt" | grep "notBefore")
-  notAfter=$(cat "$DIR/$ogIpa/SigningCertificate.txt" | grep "notAfter")
+  echo $certs > $TEMP/SigningCertificate.txt
+  notBefore=$(cat "$TEMP/SigningCertificate.txt" | grep "notBefore")
+  notAfter=$(cat "$TEMP/SigningCertificate.txt" | grep "notAfter")
 }
 
 extractVersionFuntion()
 {
-  plutil -convert xml1 $infoPlist
+  plutil -convert xml1 "$payloadFolder/$payloadApp/Info.plist"
   printf "${GREEN}Extracting the app version${NC}\n"
-  buildVersionRude=$(cat $infoPlist | grep -A1 "CFBundleVersion")
+  buildVersionRude=$(cat "$payloadFolder/$payloadApp/Info.plist" | grep -A1 "CFBundleVersion")
   printf "${BLUE}buildVersionRude $buildVersionRude\n"
   buildVersionMinEnd=$(echo ${buildVersionRude%?????????})
   printf "${BLUE}buildIDMinEnd: $buildVersionMinEnd\n"
@@ -67,7 +78,7 @@ extractVersionFuntion()
 extractBundleIDFunction()
 {
   printf "${GREEN}Extracting the bundle id${NC}\n"
-  bundleIDRude=$(cat $infoPlist | grep -A1 "CFBundleIdentifier")
+  bundleIDRude=$(cat "$payloadFolder/$payloadApp/Info.plist" | grep -A1 "CFBundleIdentifier")
   printf "${BLUE}bundleIDRude: $bundleIDRude\n"
   bundleIDMinEnd=$(echo ${bundleIDRude%?????????})
   printf "${BLUE}bundleIDMinEnd: $bundleIDMinEnd\n"
@@ -79,7 +90,7 @@ extractBundleIDFunction()
 extractProvProfEndDate()
 {
   printf "${GREEN}Extracting the end date of the provisioning profile${NC}\n"
-  ProvProfDRude=$(cat $embeddedProfile | grep -a -A1 --text "ExpirationDate")
+  ProvProfDRude=$(cat "$payloadFolder/$payloadApp/embedded.mobileprovision" | grep -a -A1 --text "ExpirationDate")
   printf "${BLUE}ProvProfRude: $ProvProfDRude\n"
   ProvProfMinEnd=$(echo ${ProvProfDRude%????????})
   printf "${BLUE}ProvProfMinEnd: $ProvProfMinEnd\n"
@@ -95,7 +106,7 @@ writeToCSV()
 
 removeTEMP()
 {
-  ##Remove the temp tempFolder
+  rm -rf $TEMP
 }
 
 
@@ -112,5 +123,12 @@ for Apps in "$repo"/*
         echo ogIpaWithExtention: $ogIpaWithExtention
         ogIpaNoExtention=$(echo ${ogIpaWithExtention%.ipa})
         echo ogIpaNoExtention: $ogIpaNoExtention
+        unZip
+        getCertificateDate
+        extractVersionFuntion
+        extractBundleIDFunction
+        extractProvProfEndDate
+        writeToCSV
+        removeTEMP
       fi
   done
