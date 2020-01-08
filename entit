@@ -1,0 +1,27 @@
+#!/usr/bin/env bash
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null && pwd )"
+
+entitlements="$DIR/entitlements.txt"
+
+pwd
+
+#cat $entitlements
+
+devApns=$(cat $entitlements | grep "development")
+#echo devApns read : $devApns
+
+
+prodApns=$(cat $entitlements | grep "production")
+#echo prodApns read : $prodApns
+
+if [[ $devApns = "Binary file (standard input) matches" ]]
+ then
+  echo dev: $devApns
+  LC_ALL=C sed -i '' 's/<string>development<\/string>//g' $entitlements
+fi
+
+if [[ $prodApns = "Binary file (standard input) matches" ]]
+ then
+  echo prod: $prodApns
+  LC_ALL=C sed -i '' 's/<string>production<\/string>//g' $entitlements
+fi
