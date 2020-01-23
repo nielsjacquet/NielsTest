@@ -1,0 +1,26 @@
+#!/usr/bin/env bash
+
+##cosmetic functions and Variables
+##Colors
+RED='\033[0;31m'
+YELLOW='\033[0;33m'
+GREEN='\033[0;32m'
+NC='\033[0m'
+BLUE='\033[0;34m'
+
+##Break function for readabillity
+BR()
+{
+  echo "  "
+}
+
+##DoubleBreak function for readabillity
+DBR()
+{
+  echo " "
+  echo " "
+}
+
+ls /Volumes/Macintosh\ HD-1/Users/Shared/myUCB4me_AppRepo | grep dev_1.5.0_19298.2
+
+strings /Users/UCB/Documents/UCB/Scriptz/HPMC_Resign/_SharedResources/ProvisioningProfile/HPMC_HpMobileCenter.mobileprovision | grep ca95a3a545956c2b366c5b8d027139bd263296bc

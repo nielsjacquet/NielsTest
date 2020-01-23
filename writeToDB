@@ -25,13 +25,9 @@ DBR()
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null && pwd )"  ##Homedir
 IFS=";"
 csvlist="$DIR/csv.csv"
-payloadApp="/Users/UCB/Documents/UCB/Scriptz/ExplodeIpa/com.ucb.apps.myucb4me.dev_1.3.0_19108.1.ipa/Payload/myUCB4me.app"
-infoPlist="/Users/UCB/Documents/UCB/Scriptz/ExplodeIpa/com.ucb.apps.myucb4me.dev_1.3.0_19108.1.ipa/Info.plist"
-embeddedProfile="/Users/UCB/Documents/UCB/Scriptz/ExplodeIpa/com.ucb.apps.myucb4me.dev_1.3.0_19108.1.ipa/Payload/myUCB4me.app/embedded.mobileprovision"
-
-repo="/Volumes/Macintosh HD-1/Users/Shared/myUCB4me_AppRepo"
-TEMP="/Volumes/Macintosh HD-1/Users/Shared/myUCB4me_AppRepo/_TEMP"
-payloadFolder="/Volumes/Macintosh HD-1/Users/Shared/myUCB4me_AppRepo/_TEMP/Payload"
+repo="/Volumes/Macintosh HD-1/Users/Shared/myUCB4me_AppRepo/Deployed"
+TEMP="$repo/_TEMP"
+payloadFolder="$TEMP/Payload"
 
 if [[ -d "$repo" ]]
   then
