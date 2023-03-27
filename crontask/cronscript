@@ -1,0 +1,50 @@
+#!/usr/bin/env bash
+
+#timers
+timer=0
+debugTimer=0
+
+#timelimits
+oneWeek=604800
+tenSeconds=10
+twentySeconds=20
+oneMinute=60
+oneHour=3600
+fiveSeconds=5
+
+timeDelay=$fiveSeconds
+debugTimeDelay=$fiveSeconds
+
+
+
+ while [[ $timer -lt $timeDelay ]]
+   do
+    sleep 1
+    echo main timer: $timer
+    echo debugTimer: $debugTimer
+    ((timer=timer+1))
+    ((debugTimer=debugTimer+1))
+      if [[ $debugTimer = $debugTimeDelay ]]
+        then
+          echo $(date +"%Y%m%d - %Hh%M") The Script is still alive! >> /Users/UCB/Documents/UCB/Scriptz/Tests/crontask/automatedCreationLog.txt
+          debugTimer=0
+      fi
+      if [[ $timer = $timeDelay ]]
+        then
+          echo $(date +"%Y%m%d - %Hh%M") certificate created >> /Users/UCB/Documents/UCB/Scriptz/Tests/crontask/automatedCreationLog.txt
+         timer=0
+      fi
+  done
+
+
+
+  # while [[ $debugTimer -lt 60 ]]
+  #  do
+  #    sleep 1
+  #    ((debugTimer=debugTimer+1))
+  #    echo debugTimer: $debugTimer
+  #     if [[ $debugTimer = 60 ]]
+  #      then
+  #       echo The script is still alive >> /Users/UCB/Documents/UCB/Scriptz/Tests/crontask/automatedCreationLog.txt
+  #     fi
+  # done

@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+configpath="/Users/UCB/Documents/UCB/Scriptz/InjectConfigPlist/Config.plist"
+
+replace()
+{
+  cat $configpath
+#get configplist
+
+#get environment
+#replace dev/acc
+
+#replace study  
+}
+
+
+replace

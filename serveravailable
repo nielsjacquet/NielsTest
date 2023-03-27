@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+server=192.168.1.4
+ping -c1 -W1 -q $server
+pingstat=$?
+if [[ $pingstat=0 ]]
+  then
+  echo server is reachable
+  mount smb://$server
+  else
+  echo server is unreachable!
+fi

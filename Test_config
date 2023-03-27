@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+
+## Setting the homefolder
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null && pwd )"        # Homedir
+
+##load the config file
+##. /path/to/some.config
+. /$DIR/testconfig.config
+
+echo 1:$codeSign
+echo 2:$keychainPW

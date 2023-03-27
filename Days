@@ -21,6 +21,8 @@ DBR()
   echo " "
 }
 
-ls /Volumes/Macintosh\ HD-1/Users/Shared/myUCB4me_AppRepo | grep dev_1.5.0_19298.2
-
-strings /Users/UCB/Documents/UCB/Scriptz/HPMC_Resign/_SharedResources/ProvisioningProfile/HPMC_HpMobileCenter.mobileprovision | grep ca95a3a545956c2b366c5b8d027139bd263296bc
+printf "${GREEN}Enter the begin date in format dd/mm/yyyy ${NC}\n"
+read beginDate
+printf "${GREEN}Enter the amount of days ${NC}\n"
+read amount
+date -j -v +"$amount"d -f "%d/%m/%Y" "$beginDate"

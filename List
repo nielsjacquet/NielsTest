@@ -1,0 +1,32 @@
+#!/usr/bin/env bash
+
+##ScriptPath
+ScriptPath="/Users/nielsjacquet/Documents/UCB/Scripts"
+
+testsPath="$ScriptPath/Tests"
+cd $testsPath
+ls -F | grep '*$'
+
+HPMCResignPath="$ScriptPath/HPMC_Resign"
+cd $HPMCResignPath
+ls -F | grep '*$'
+
+injectConfigPath="$ScriptPath/InjectConfigPlist"
+cd $injectConfigPath
+ls -F | grep '*$'
+
+parsePath="$ScriptPath/SecurityRestrictions"
+cd $parsePath
+ls -F | grep '*$'
+
+ExplodePath="$ScriptPath/ExplodeIpa"
+cd $ExplodePath
+ls -F | grep '*$'
+
+RenamePath="$ScriptPath/RenameFromIpa"
+cd $RenamePath
+ls -F | grep '*$'
+
+RemoveConfigUrlPath="$ScriptPath/RemoveConfigUrl"
+cd $RemoveConfigUrlPath
+ls -F | grep '*$'

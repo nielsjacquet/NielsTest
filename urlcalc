@@ -1,0 +1,34 @@
+#!/usr/bin/env bash
+endPointsArg="AIE001"
+environmentArg=DEV
+
+urlCalculator()
+{
+  case $environmentArg in
+    PRD )
+    apiURl="https://"$endPointsArg"-api-mtls.my.ucb.com"
+    tokenURl="https://"$endPointsArg"-token-mtls.my.ucb.com"
+    apiSignalrOrigin="https://"$endPointsArg"-televisits.my.ucb.be"
+    apiSignalrUrl="https://apis.ucb-apps.be/v1/btpa-"$endPointsArg"-api"
+      ;;
+    ACC )
+    apiURl="https://"$endPointsArg"-acc-api-mtls.my.ucb.com"
+    tokenURl="https://"$endPointsArg"-acc-token-mtls.my.ucb.com"
+    apiSignalrOrigin="https://"$endPointsArg"-ACC-televisits.my.ucb-ACC.be"
+    apiSignalrUrl="https://apis.ucb-apps.be/v1/ACC-btpa-"$endPointsArg"-api"
+      ;;
+    DEV )
+    apiURl="https://"$endPointsArg"-dev-api-mtls.my.ucb.com"
+    tokenURl="https://"$endPointsArg"-dev-token-mtls.my.ucb.com"
+    apiSignalrOrigin="https://"$endPointsArg"-DEV-televisits.my.ucb-DEV.be"
+    apiSignalrUrl="https://apis.ucb-apps.be/v1/DEV-btpa-"$endPointsArg"-api"
+      ;;
+
+  esac
+  echo apiURl: $apiURl
+  echo tokenURl: $tokenURl
+  echo apiSignalrOrigin: $apiSignalrOrigin
+  echo apiSignalrUrl: $apiSignalrUrl
+}
+
+urlCalculator

@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+
+##script is used to close all work apps on the end of the day
+killall Vivaldi
+killall Teams
+killall Microsoft\ OneNote
+killall Apple\ Configurator\ 2
+killall Microsoft\ Excel

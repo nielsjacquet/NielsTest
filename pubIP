@@ -1,0 +1,36 @@
+#!/usr/bin/env bash
+##IP log path
+ipLogPath="/Users/UCB/Documents/UCB/Scriptz/Tests/iplog"
+##hardCodedIP
+hardCodedIP="94.225.52.20"
+
+##get public IP from api
+pubIPfromAPI=$(curl -s https://api.ipify.org)
+
+##DEBUG
+
+
+##define counters
+minute=60
+hour=3600
+##set counter to zero
+tiktok=0
+while [[ $tiktok -lt $minute ]]
+  do
+    sleep 1
+    ((tiktok=tiktok+1))
+    echo $tiktok
+
+    if [[ $tiktok = $minute ]]
+      then
+        if [[ "$pubIPfromAPI" != "$hardCodedIP" ]]
+          then
+            fixDate=$(date +"%Y%m%d - %Hh%M")
+            echo "Public IP changed at $fixDate" >> $ipLogPath
+            echo "old ip: "$hardCodedIP >> $ipLogPath
+            echo "new ip: "$pubIPfromAPI >> $ipLogPath
+            echo "-------------------------" >> $ipLogPath
+        fi
+        tiktok=0
+    fi
+  done
